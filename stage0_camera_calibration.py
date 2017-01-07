@@ -121,7 +121,7 @@ def process_image(image):
     result = cv2.undistort(image, mtx, dist, None, mtx)
     return result
 
-output = 'calibrated_project_video.mp4'
+output = 'stage0_calibrated_project_video.mp4'
 clip = VideoFileClip("project_video.mp4")
 calibrated_clip = clip.fl_image(process_image) #NOTE: this function expects color images!!
 get_ipython().magic('time calibrated_clip.write_videofile(output, audio=False)')
