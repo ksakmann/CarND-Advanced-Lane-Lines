@@ -17,7 +17,7 @@ The goals / steps of this project are the following:
 
 [image1]: ./Undistort.jpg "Undistorted"
 [image2]: ./Undistort_test5.jpg "Undistorted"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
+[image3]: ./binary.jpg "Binary Example"
 [image4]: ./examples/warped_straight_lines.jpg "Warp Example"
 [image5]: ./examples/color_fit_lines.jpg "Fit Visual"
 [image6]: ./examples/example_output.jpg "Output"
@@ -41,5 +41,15 @@ I start by preparing "object points", which will are (x, y, z) coordinates of th
 ## Stage 1 - Test Image Pipeline
 
 #### 2.Provide an example of a distortion-corrected image.
-Applying the undistortion transformation to a test image yields the following result
+Applying the undistortion transformation to a test image yields the following result (left distorted, right corrected)
 ![Undistort][image2]
+#### 3. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image. Provide an example of a binary image result.
+For color thresholding I worked in HLS space. Only the L and S channel were used. I used the s channel for a gradient filter along x and saturation threshold, as well as the l channel for a luminosity threshold filter. A combination of these filters
+is used in the function `binarize` in the file `stage1_test_image_pipeline.ipynb`. The binarized version of the image above looks as follows
+![Binarized image][image3]
+
+
+#### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
+The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+
+
