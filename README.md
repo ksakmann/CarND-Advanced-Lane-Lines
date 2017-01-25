@@ -15,10 +15,10 @@ The goals / steps of this project are the following:
 ---
 [//]: # (Image References)
 
-[image1]: ./Undistort.jpg "Undistorted"
-[image2]: ./Undistort_test5.jpg "Undistorted"
-[image3]: ./binary.jpg "Binary Example"
-[image4]: ./birdseye.jpg "Warp Example"
+[image1]: ./output_images/stage0/Undistort.jpg "Undistorted"
+[image2]: ./output_images/stage0/Undistort_test5.jpg "Undistorted"
+[image3]: ./output_images/stage1/binary.jpg "Binary Example"
+[image4]: ./output_images/stage1/birdseye.jpg "Warp Example"
 [image5]: ./output_images/stage1/roi.jpg "Region of interest"
 [image6]: ./output_images/stage1/separate_binary_lines.jpg "Separate Lines"
 [image7]: ./output_images/stage1/project_test5.jpg "Projected lines"
