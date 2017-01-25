@@ -22,7 +22,7 @@ The goals / steps of this project are the following:
 [image5]: ./output_images/stage1/roi.jpg "Region of interest"
 [image6]: ./output_images/stage1/separate_binary_lines.jpg "Separate Lines"
 [image7]: ./output_images/stage1/project_test5.jpg "Projected lines"
-[video1]: ./output_images/stage2/stage2_project_video.mp4 "Video"
+[video1]: ./processed_project_video.mp4 "Video"
 
 ### [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 In the following I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -79,13 +79,13 @@ This region is defined through the function `region_of_interest()` and was teste
 ![alt text][image5]
 
 
-####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
+#### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 The function `find_peaks(img,thresh)` in cell of `stage1_tes_images_pipeline.ipynb` takes the bottom half of a binarized and warped lane image to compute a histogram of detected pixel values. The result is smoothened using a gaussia filter and peaks are subsequently detected using. The function returns the x values of the peaks larger than `thresh` as well as the smoothened curve. 
 
 Then I wrote a function `get_next_window(img,center_point,width)` which takes an binary (3 channel) image `img` and computes the average x value `center` of all detected pixels in a window centered at `center_point` of width `width`. It returns a masked copy of img a well as `center`.
 
 The function `lane_from_window(binary,center_point,width)` slices a binary image horizontally in 6 zones and applies `get_next_window`  to each of the zones. The `center_point` of each zone is chosen to be the `center` value of the previous zone. Thereby subsequent windows follow the lane line pixels if the road bends. The function returns a masked image of a single lane line seeded at `center_point`. 
-Given a binary image `left_binary` of a lane line candidate all properties of the line are determined within an instance of a `Line` class. The class is defined in cell 
+Given a binary image `left_binary` of a lane line candidate all properties of the line are determined within an instance of a `Line` class. The class is defined in cell 11
 ``` 
     left=Line(n)
     detected_l,n_buffered_left = left.update(left_binary)
@@ -96,14 +96,37 @@ A fit to the current lane candidate is saved in the `Line.current_fit_xvals` att
 
 ![line fit][image6]
 
-####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+#### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 The radius of curvature is computed upon calling the `Line.update()` method of a line. The method that does the computation is called `Line.get_radius_of_curvature()`. The mathematics involved is summarized in [this tutorial here](http://www.intmath.com/applications-differentiation/8-radius-curvature.php).  
 For a second order polynomial f(y)=A y^2 +B y + C the radius of curvature is given by R = [(1+(2 Ay +B)^2 )^3/2]/|2A|.
 
 The distance from the center of the lane is computed in the `Line.set_line_base_pos()` method, which essentially measures the distance to each lane and computes the position assuming the lane has a given fixed width of 3.7m. 
 
-####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+#### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in cell in my code in `stage1_test_image_pipeline.ipynb` in the function `project_lane_lines()` which is called by `process_image()`. This last function process_image(img) handles all lost lane logic   Here is an example of my result on a test image:
+I implemented this step in cells 13 and 14 in my code in `stage1_test_image_pipeline.ipynb` in the function `project_lane_lines()` which is called by `process_image()`. This last function process_image(img) handles all lost lane logic. Here is an example of the result on a test image:
 
 ![alt text][image7]
+
+
+---
+
+### Pipeline (video)
+
+#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+
+I took the code developed in `stage1_test_image_pipeline.ipynb` and processed the project video using a small. The processing The project video can be found here []asda() 
+Here's a [link to my video result](./processed_project_video.mp4)
+
+---
+
+###Discussion
+
+#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+
+Getting the pipeline to be robust against shadows and at the same time capable of detecting yellow lane lines on white ground was the greates difficulty. I took the approach that lines should never have very low saturation values, i.e. be black. Setting a minimal value for the saturation helped when paired with the x gradient and absolute gradient threshold. Problematic is also the case when more than two lanes get detected. For lines detected far away a threshold on the distance eliminated the problem. By far the most work was implementing the logic of a continuous update of detected lines as well as restarting when the buffer of previous lines emptied. At the moment the pipeline will likely fail as soon as more (spurious) lines are on the same lane, as e.g. in the first challenge video. This could be solved by building separate lane line detectors for yellow and white together with additional logic which line to choose. 
+
+
+Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further. 
+
+
