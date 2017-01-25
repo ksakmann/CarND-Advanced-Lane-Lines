@@ -18,8 +18,8 @@ The goals / steps of this project are the following:
 [image1]: ./Undistort.jpg "Undistorted"
 [image2]: ./Undistort_test5.jpg "Undistorted"
 [image3]: ./binary.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
+[image4]: ./birdseye.jpg "Warp Example"
+[image5]: ./roi.jpg "Region of interest"
 [image6]: ./examples/example_output.jpg "Output"
 [video1]: ./project_video.mp4 "Video"
 
@@ -50,6 +50,29 @@ is used in the function `binarize` in the file `stage1_test_image_pipeline.ipynb
 
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+A perspective transform to and from "bird's eye" perspective is done in a function called `warp()`, which appears in 5th cell of the notebook `stage1_test_image_pipeline.ipynb`.  The `warp()` function takes as input an color image (`img`), as well as the `tobird` boolean paramter. The parameters `src` and ` dst` of the transform are hardcoded in the function as follows:
 
+```
+    corners = np.float32([[190,720],[589,457],[698,457],[1145,720]])
+    new_top_left=np.array([corners[0,0],0])
+    new_top_right=np.array([corners[3,0],0])
+    offset=[150,0]
+    
+    img_size = (img.shape[1], img.shape[0])
+    src = np.float32([corners[0],corners[1],corners[2],corners[3]])
+    dst = np.float32([corners[0]+offset,new_top_left+offset,new_top_right-offset ,corners[3]-offset])    
+```
+This resulted in the following source and destination points:
 
+| Source        | Destination   | 
+|:-------------:|:-------------:| 
+| 190, 720      | 340, 720    | 
+| 589, 457      | 340, 0      |
+| 698, 457      | 995, 0      |
+| 1145,720      | 995, 720    |
+
+I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image. See the following image
+![alt text][image4]
+Additionally, I included a region of interest that acts on the warped image to reduce artefacts at the bottom of the image.
+This region is defined through the function `region_of_interest()` and was tested using the wrappers `warp_pipeline(img)` and `warp_binarize_pipeline(img)`An example is shown below. 
+![alt text][image5]
