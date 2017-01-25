@@ -21,8 +21,8 @@ The goals / steps of this project are the following:
 [image4]: ./birdseye.jpg "Warp Example"
 [image5]: ./output_images/stage1/roi.jpg "Region of interest"
 [image6]: ./output_images/stage1/separate_binary_lines.jpg "Separate Lines"
-[image7]: ./output_images/stage1/fitted_lines.jpg "Fitted lined"
-[video1]: ./project_video.mp4 "Video"
+[image7]: ./output_images/stage1/project_test5.jpg "Projected lines"
+[video1]: ./output_images/stage2/stage2_project_video.mp4 "Video"
 
 ### [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 In the following I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -90,7 +90,7 @@ Given a binary image `left_binary` of a lane line candidate all properties of th
     left=Line(n)
     detected_l,n_buffered_left = left.update(left_binary)
 ```
-The `Line.update(img)` method takes a binary input image `img` of a lane line candidate, fits a second order polynomial to the provided data and computes other metrics. Sanity checks are performed and successful detections are pushed into a dequeue of max length `n`. Each time a new line is detected all metrics are updated. If no line is detected the oldest result is dropped until the queue is empty and peaks need to be searched for from scratch. 
+The `Line.update(img)` method takes a binary input image `img` of a lane line candidate, fits a second order polynomial to the provided data and computes other metrics. Sanity checks are performed and successful detections are pushed into a FIFO que of max length `n`. Each time a new line is detected all metrics are updated. If no line is detected the oldest result is dropped until the queue is empty and peaks need to be searched for from scratch. 
 
 A fit to the current lane candidate is saved in the `Line.current_fit_xvals` attribute, together with the corresponding coefficients. The result of a fit for two lines is shown below.
 
@@ -100,10 +100,10 @@ A fit to the current lane candidate is saved in the `Line.current_fit_xvals` att
 The radius of curvature is computed upon calling the `Line.update()` method of a line. The method that does the computation is called `Line.get_radius_of_curvature()`. The mathematics involved is summarized in [this tutorial here](http://www.intmath.com/applications-differentiation/8-radius-curvature.php).  
 For a second order polynomial f(y)=A y^2 +B y + C the radius of curvature is given by R = [(1+(2 Ay +B)^2 )^3/2]/|2A|.
 
-The distance from the center of the lane is computed in the `Line.set_line_base_pos()` method, which essentially measures the distance to each lane and computes the position assuming the lane has a given fixed width. 
+The distance from the center of the lane is computed in the `Line.set_line_base_pos()` method, which essentially measures the distance to each lane and computes the position assuming the lane has a given fixed width of 3.7m. 
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+I implemented this step in cell in my code in `stage1_test_image_pipeline.ipynb` in the function `project_lane_lines()` which is called by `process_image()`. This last function process_image(img) handles all lost lane logic   Here is an example of my result on a test image:
 
-![alt text][image8]
+![alt text][image7]
