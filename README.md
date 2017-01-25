@@ -101,10 +101,7 @@ The result of a successfull fit is shown below.
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 The radius of curvature is computed upon calling the `Line.update()` method of a line. The method that does the computation is called `Line.get_radius_of_curvature()`. The mathematics involved is summarized in [this tutorial here](http://www.intmath.com/applications-differentiation/8-radius-curvature.php).  
-The final equation for a second order polynomial f(y)=A y^2 +B y + C is 
----
-R = [(1+(2 Ay +B)^2 )^3/2]/|2A|
----
+For a second order polynomial f(y)=A y^2 +B y + C the radius of curvature is given by R = [(1+(2 Ay +B)^2 )^3/2]/|2A|.
 
 The distance from the center of the lane is computed in the `Line.set_line_base_pos()` method, which essentially measures the distance to each lane and computes the position assuming the lane has a given fixed width. 
 
