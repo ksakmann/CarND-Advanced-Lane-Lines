@@ -115,8 +115,8 @@ I implemented this step in cells 13 and 14 in my code in `stage1_test_image_pipe
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-I took the code developed in `stage1_test_image_pipeline.ipynb` and processed the project video using a small. The processing The project video can be found here []asda() 
-Here's a [link to my video result](./processed_project_video.mp4)
+I took the code developed in `stage1_test_image_pipeline.ipynb` and processed the project video in `stage2_video_pipeline.ipynb`. The processed project video can be found here:
+[link to my video result](./processed_project_video.mp4)
 
 ---
 
