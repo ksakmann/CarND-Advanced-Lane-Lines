@@ -21,6 +21,7 @@ The goals / steps of this project are the following:
 [image4]: ./birdseye.jpg "Warp Example"
 [image5]: ./output_images/stage1/roi.jpg "Region of interest"
 [image6]: ./output_images/stage1/separate_binary_lines.jpg "Separate Lines"
+[image7]: ./output_images/stage1/fitted_lines.jpg "Fitted lined"
 [video1]: ./project_video.mp4 "Video"
 
 ### [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
@@ -87,15 +88,14 @@ The function `lane_from_window(binary,center_point,width)` slices a binary image
 
 ![alt text][image6]
 
-Given binary images `left_binary` and `right_binary` of prospective lane lines all properties are determined within instances of a `Line` class as follows:
+Given a binary image `left_binary` of a lane line candidate all properties of the line are determined within an instance of a `Line` class. The class is defined in cell 
 ``` 
     left=Line(n)
     detected_l,n_buffered_left = left.update(left_binary)
 ```
 The `Line.update(img)` method takes a binary input image `img` of a lane line candidate, fits a second order polynomial to the provided data and computes other metrics. Sanity checks are performed and successful detections are pushed into a dequeue of max length `n`. Each time a new line is detected all metrics are updated. If no line is detected the oldest result is dropped until the queue is empty and peaks need to be searched for from scratch. 
 
-A fit to the current lane candidate is saved in the `Line.current_fit_xvals` attribute, together with the corresponding coefficients.
-The result of a successfull fit is shown below.
+A fit to the current lane candidate is saved in the `Line.current_fit_xvals` attribute, together with the corresponding coefficients. The result of a fit for two lines is shown below.
 
 ![line fit][image7]
 
