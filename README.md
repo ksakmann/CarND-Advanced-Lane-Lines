@@ -76,3 +76,37 @@ I verified that my perspective transform was working as expected by drawing the 
 Additionally, I included a region of interest that acts on the warped image to reduce artefacts at the bottom of the image.
 This region is defined through the function `region_of_interest()` and was tested using the wrappers `warp_pipeline(img)` and `warp_binarize_pipeline(img)`An example is shown below. 
 ![alt text][image5]
+
+
+####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
+The function `find_peaks(img,thresh)` in cell of `stage1_tes_images_pipeline.ipynb` takes the bottom half of a binarized and warped lane image to compute a histogram of detected pixel values. The result is smoothened using a gaussia filter and peaks are subsequently detected using. The function returns the x values of the peaks larger than `thresh` as well as the smoothened curve. 
+
+Then I wrote a function `get_next_window(img,center_point,width)` which takes an binary (3 channel) image `img` and computes the average x value `center` of all detected pixels in a window centered at `center_point` of width `width`. It returns a masked copy of img a well as `center`.
+
+The function `lane_from_window(binary,center_point,width)` slices a binary image horizontally in 6 zones and applies `get_next_window`  to each of the zones. The `center_point` of each zone is chosen to be the `center` value of the previous zone. Thereby subsequent windows follow the lane line pixels if the road bends. The function returns a masked image of a single lane line seeded at `center_point`. An example is shown below. 
+
+![alt text][image6]
+
+Given binary images `left_binary` and `right_binary` of prospective lane lines all properties are determined within instances of a `Line` class as follows:
+``` 
+    left=Line(n)
+    detected_l,n_buffered_left = left.update(left_binary)
+```
+The `Line.update(img)` method takes a binary input image `img` of a lane line candidate, fits a second order polynomial to the provided data and computes other metrics. Sanity checks are performed and successful detections are pushed into a dequeue of max length `n`. Each time a new line is detected all metrics are updated. If no line is detected the oldest result is dropped until the queue is empty and peaks need to be searched for from scratch. 
+
+A fit to the current lane candidate is saved in the `Line.current_fit_xvals` attribute, together with the corresponding coefficients.
+The result of a successfull fit is shown below.
+
+![line fit][image7]
+
+####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+The radius of curvature is computed upon calling the `Line.update()` method of a line. The method that does the computation is called `Line.get_radius_of_curvature()`. The mathematics involved is summarized in [this tutorial here](http://www.intmath.com/applications-differentiation/8-radius-curvature.php).  
+For a second order polynomial f(y)=A y^2 +B y + C the radius of curvature is given by R = [(1+(2 Ay +B)^2 )^3/2]/|2A|.
+
+The distance from the center of the lane is computed in the `Line.set_line_base_pos()` method, which essentially measures the distance to each lane and computes the position assuming the lane has a given fixed width. 
+
+####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+
+I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+
+![alt text][image8]
