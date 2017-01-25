@@ -19,8 +19,8 @@ The goals / steps of this project are the following:
 [image2]: ./Undistort_test5.jpg "Undistorted"
 [image3]: ./binary.jpg "Binary Example"
 [image4]: ./birdseye.jpg "Warp Example"
-[image5]: ./roi.jpg "Region of interest"
-[image6]: ./examples/example_output.jpg "Output"
+[image5]: ./output_images/stage1/roi.jpg "Region of interest"
+[image6]: ./output_images/stage1/separate_binary_lines.jpg "Separate Lines"
 [video1]: ./project_video.mp4 "Video"
 
 ### [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
