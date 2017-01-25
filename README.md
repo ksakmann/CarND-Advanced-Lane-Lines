@@ -83,18 +83,26 @@ The function `find_peaks(img,thresh)` in cell of `stage1_tes_images_pipeline.ipy
 
 Then I wrote a function `get_next_window(img,center_point,width)` which takes an binary (3 channel) image `img` and computes the average x value `center` of all detected pixels in a window centered at `center_point` of width `width`. It returns a masked copy of img a well as `center`.
 
-The function `lane_from_window(binary,center_point,width)` slices a binary image horizontally in 6 zones and applies `get_next_window`  to each of the zones. The `center_point` of each zone is chosen to be the `center` value of the previous zone. This way the windows can follow the lane line pixels if the road bends. The final result is a masked image of a single lane line. 
-seeded at `center_point`. An example is shown below. 
+The function `lane_from_window(binary,center_point,width)` slices a binary image horizontally in 6 zones and applies `get_next_window`  to each of the zones. The `center_point` of each zone is chosen to be the `center` value of the previous zone. Thereby subsequent windows follow the lane line pixels if the road bends. The function returns a masked image of a single lane line seeded at `center_point`. An example is shown below. 
+
 ![alt text][image6]
 
+Given binary images `left_binary` and `right_binary` of prospective lane lines all properties are determined within instances of a `Line` class as follows:
+``` 
+    left=Line(n)
+    detected_l,n_buffered_left = left.update(left_binary)
+```
+The `Line.update(img)` method takes a binary input image `img` of a lane line candidate, fits a second order polynomial to the provided data and computes other metrics. Sanity checks are performed and successful detections are pushed into a dequeue of max length `n`. Each time a new line is detected all metrics are updated. If no line is detected the oldest result is dropped until the queue is empty and peaks need to be searched for from scratch. 
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+A fit to the current lane candidate is saved in the `Line.current_fit_xvals` attribute, together with the corresponding coefficients.
+The result of a successfull fit is shown below.
 
-![alt text][image7]
+![line fit][image7]
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+The radius of curvature is computed upon calling the `Line.update()` method of a line. The method that does the computation is called `Line.get_radius_of_curvature()`. The mathematics involved is summarized in [this tutorial here](http://www.intmath.com/applications-differentiation/8-radius-curvature.php).  
 
-I did this in lines # through # in my code in `my_other_file.py`
+The distance from the center of the lane is computed in the `Line.set_line_base_pos()` method, which essentially measures the distance to each lane and computes the position assuming the lane has a given fixed width. 
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
