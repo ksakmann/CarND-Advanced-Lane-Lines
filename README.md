@@ -1,7 +1,10 @@
-# Advanced Lane Finding
+# Advanced Lane Line Finding
 
 This project is about building a lane line detector that is robust to changes in lighting conditions. 
-It is part of the [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
+It is part of the Udacity self-driving car Nanodegree. Please see the links below for details and the project requirements
+
+* [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
+* [rubric](https://review.udacity.com/#!/rubrics/571/view)
 
 # Introduction
 The steps of this project are as follows:  
@@ -31,7 +34,6 @@ The steps of this project are as follows:
 
 In the following I will consider all steps individually and describe how I addressed each point in the implementation. 
 The images for camera calibration are stored in the folder called `camera_cal`.  Images in `test_images` are for testing the pipeline on single frames.  Results are in the  `ouput_images` folder and subfolders `stage0, stage1, stage2`.
-See the [rubric](https://review.udacity.com/#!/rubrics/571/view) points for more details on this project.
 
 # Camera calibration 
 
